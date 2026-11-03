@@ -7,3 +7,5 @@ target/
 __pycache__/
 .claude/
 /zh-TW/theme/
+names.txt
+output.txt
