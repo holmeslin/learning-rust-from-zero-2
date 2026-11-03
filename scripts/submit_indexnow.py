@@ -20,8 +20,8 @@ from edition_config import EDITION_CODES
 from normalize_public_urls import public_alias
 
 
-SITE_URL = "https://andyshiue.github.io/learning-rust-from-zero"
-HOST = "andyshiue.github.io"
+SITE_URL = "https://holmeslin.github.io/learning-rust-from-zero"
+HOST = "holmeslin.github.io"
 ENDPOINT = "https://api.indexnow.org/indexnow"
 LANGUAGES = set(EDITION_CODES)
 KEY_PATTERN = re.compile(r"[A-Za-z0-9-]{8,128}")

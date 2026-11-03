@@ -13,7 +13,7 @@ from urllib.parse import quote
 from edition_config import EDITION_CODES, load_edition_config
 
 
-SITE_URL = "https://andyshiue.github.io/learning-rust-from-zero"
+SITE_URL = "https://holmeslin.github.io/learning-rust-from-zero"
 SITE_NAME = "Learning Rust from Zero / 從零開始學 Rust"
 ROOT_DESCRIPTION = (
     "A Rust tutorial for absolute beginners, from basic syntax and ownership "

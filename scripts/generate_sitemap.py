@@ -9,7 +9,7 @@ from urllib.parse import quote
 from xml.sax.saxutils import escape
 
 
-SITE_URL = "https://andyshiue.github.io/learning-rust-from-zero"
+SITE_URL = "https://holmeslin.github.io/learning-rust-from-zero"
 EXCLUDED_PAGES = {"404.html", "print.html"}
 REDIRECT_MARKER = "<!-- URL_ALIAS_REDIRECT -->"
 

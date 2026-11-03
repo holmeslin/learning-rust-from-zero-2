@@ -11,7 +11,7 @@ default-theme = "light"
 preferred-dark-theme = "ayu"
 git-repository-url = "https://github.com/AndyShiue/learning-rust-from-zero"
 edit-url-template = "https://github.com/AndyShiue/learning-rust-from-zero/edit/main/zh-TW/{path}"
-site-url = "https://andyshiue.github.io/learning-rust-from-zero/zh-TW/"
+site-url = "https://holmeslin.github.io/learning-rust-from-zero/zh-TW/"
 additional-css = ["theme/code-fix.css", "theme/share.css"]
 additional-js = ["theme/share.js"]
 
