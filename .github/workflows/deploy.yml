@@ -47,7 +47,7 @@ jobs:
         run: test "$(mdbook --version)" = "mdbook v${MDBOOK_VERSION}"
 
       - name: Install PDF dependencies
-        # v1.6.3; texlive and fonts need their postinst scripts (fmtutil, fc-cache) on restore.
+        # v1.6.3; restored packages still need their postinst scripts.
         uses: awalsh128/cache-apt-pkgs-action@553a35bb8ebd9fcabcb1c9451aa4c98e1b4ca8a9
         with:
           packages: >-
@@ -61,6 +61,12 @@ jobs:
             fonts-symbola
           version: ubuntu-26.04-1
           execute_install_scripts: true
+
+      - name: Rebuild TeX file index and xelatex format
+        # dpkg triggers (mktexlsr, fmtutil) do not run when packages come from the apt cache.
+        run: |
+          sudo mktexlsr
+          sudo fmtutil-sys --byfmt xelatex
 
       - name: Prepare shared book resources
         run: |

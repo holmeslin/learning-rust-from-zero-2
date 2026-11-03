@@ -190,6 +190,6 @@ python3 scripts/generate_sitemap.py public
 - **build**：每次推送到 `main`，以及每個指向 `main` 的 pull request，都會執行完整的測試、網頁版、PDF 與網站組合。同一個 PR 有新的 push 時，會取消還在跑的舊檢查。
 - **deploy**：只有推送到 `main` 時才會執行，把 build 上傳的網站部署到 GitHub Pages。
 
-PDF 需要的 apt 套件（texlive、字型等）用 `awalsh128/cache-apt-pkgs-action` 快取，並鎖定在特定 commit。套件清單有變動時，快取會自動重建；如果需要強制重建，把 `version` 的值加一即可（例如 `ubuntu-26.04-1` 改成 `ubuntu-26.04-2`）。
+PDF 需要的 apt 套件（texlive、字型等）用 `awalsh128/cache-apt-pkgs-action` 快取，並鎖定在特定 commit。從快取還原的套件不會觸發 dpkg trigger，所以下一步會用 `mktexlsr` 和 `fmtutil-sys --byfmt xelatex` 重建 TeX 檔案索引與 xelatex 格式檔。套件清單有變動時，快取會自動重建；如果需要強制重建，把 `version` 的值加一即可（例如 `ubuntu-26.04-1` 改成 `ubuntu-26.04-2`）。
 
 repo 的 Settings → Pages 必須把來源設成「GitHub Actions」，deploy job 才能成功。
