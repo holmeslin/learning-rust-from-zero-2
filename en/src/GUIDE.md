@@ -31,7 +31,7 @@ Basic information:
 | --- | --- |
 | Title | Learning Rust from Zero |
 | Author | Andy Shiue |
-| Online version | <https://andyshiue.github.io/learning-rust-from-zero/en/> |
+| Online version | <https://holmeslin.github.io/learning-rust-from-zero/en/> |
 | Language | English, translated from the Traditional Chinese original |
 | Audience | Absolute beginners; readable with no programming experience |
 | Rust version | Edition 2024 |

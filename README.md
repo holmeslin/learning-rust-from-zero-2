@@ -4,7 +4,7 @@
 
 # Learning Rust from Zero
 
-A Rust tutorial for programming beginners. Read the [English edition](https://andyshiue.github.io/learning-rust-from-zero/en/).
+A Rust tutorial for programming beginners. Read the [English edition](https://holmeslin.github.io/learning-rust-from-zero/en/).
 
 ## Contributing
 
@@ -22,7 +22,7 @@ The favicon uses third-party Google Noto Emoji artwork; see [THIRD_PARTY_NOTICES
 
 # 從零開始學 Rust
 
-為程式新手準備的 Rust 教學，請閱讀[繁體中文版](https://andyshiue.github.io/learning-rust-from-zero/zh-TW/)。
+為程式新手準備的 Rust 教學，請閱讀[繁體中文版](https://holmeslin.github.io/learning-rust-from-zero/zh-TW/)。
 
 ## 貢獻
 

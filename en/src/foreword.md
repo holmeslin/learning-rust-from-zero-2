@@ -8,7 +8,7 @@ That said, I still recommend reading this tutorial chapter by chapter. If you ha
 
 If, while reading, you run into a passage you don't understand, want practice problems, or your program won't run, and you'd like to ask an AI for help, I've prepared a zip archive for AIs to read, so that the AI can respond to your needs more precisely. To use it, just upload the entire archive to the AI, tell it "Please read the `GUIDE.md` inside the archive before answering me," let the AI know which chapter and episode you're currently on, and then state your request. The download link for the archive is below:
 
-> `rust-book-src.zip`: [https://andyshiue.github.io/learning-rust-from-zero/en/rust-book-src.zip](https://andyshiue.github.io/learning-rust-from-zero/en/rust-book-src.zip)
+> `rust-book-src.zip`: [https://holmeslin.github.io/learning-rust-from-zero/en/rust-book-src.zip](https://holmeslin.github.io/learning-rust-from-zero/en/rust-book-src.zip)
 
 I strongly recommend using a good AI model to read the archive! A free AI might not even bother to read what's inside.
 
@@ -24,11 +24,11 @@ A little slow on the uptake, I only realized later that many readers might hand 
 
 This tutorial also has a PDF version available for download:
 
-> PDF version: [https://andyshiue.github.io/learning-rust-from-zero/en/book.pdf](https://andyshiue.github.io/learning-rust-from-zero/en/book.pdf)
+> PDF version: [https://holmeslin.github.io/learning-rust-from-zero/en/book.pdf](https://holmeslin.github.io/learning-rust-from-zero/en/book.pdf)
 
 However, I may not maintain the PDF version in the long run, so I recommend reading the interactive web version instead. If you happen to be reading the PDF version right now, here's the URL of the web version:
 
-> Web version: [https://andyshiue.github.io/learning-rust-from-zero/en/](https://andyshiue.github.io/learning-rust-from-zero/en/)
+> Web version: [https://holmeslin.github.io/learning-rust-from-zero/en/](https://holmeslin.github.io/learning-rust-from-zero/en/)
 
 Finally, let me mention the interactive features I referred to above, since otherwise I'm afraid nobody would notice them: you can run the code directly inside the web version of this tutorial. There are a few buttons at the top-right corner of each code snippet in the text — press them and you'll see what happens. That's about it for now......
 

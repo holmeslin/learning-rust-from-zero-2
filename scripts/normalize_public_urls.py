@@ -27,7 +27,7 @@ from urllib.parse import quote
 from edition_config import EDITION_CODES, load_edition_config
 
 
-SITE_URL = "https://andyshiue.github.io/learning-rust-from-zero"
+SITE_URL = "https://holmeslin.github.io/learning-rust-from-zero"
 EDITIONS = {code: load_edition_config(code) for code in EDITION_CODES}
 EXCLUDED_NAMES = {"404.html", "print.html"}
 REDIRECT_MARKER = "<!-- URL_ALIAS_REDIRECT -->"
