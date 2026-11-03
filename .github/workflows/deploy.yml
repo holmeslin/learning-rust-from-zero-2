@@ -2,19 +2,15 @@ name: deployment
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
 
 env:
-  # Keep CI reproducible; update these pins deliberately when new releases
-  # have been checked against both editions.
+  # Keep CI reproducible; update these pins deliberately after the new
+  # releases pass the book tests and builds.
   RUSTUP_TOOLCHAIN: "1.98.0"
   MDBOOK_VERSION: "0.5.4"
   NOTO_CJK_REVISION: "f8d157532fbfaeda587e826d4cd5b21a49186f7c"
@@ -23,19 +19,15 @@ env:
   NOTO_SANS_MONO_CJK_TC_REGULAR_SHA256: "82a040aed900bba51b5990bc158a86b264c8ad5071a2d8911e8696350e0794b3"
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-26.04
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    # A newer push to the same PR makes the running check obsolete.
+    concurrency:
+      group: build-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Check bilingual source mirror
-        run: python3 scripts/check_bilingual_mirror.py
 
       - name: Install Rust toolchain
         run: rustup toolchain install "$RUSTUP_TOOLCHAIN" --profile minimal --no-self-update
@@ -55,17 +47,26 @@ jobs:
         run: test "$(mdbook --version)" = "mdbook v${MDBOOK_VERSION}"
 
       - name: Install PDF dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            pandoc \
-            texlive-xetex \
-            texlive-fonts-recommended \
-            texlive-lang-chinese \
-            lmodern \
-            fonts-jetbrains-mono \
-            fonts-noto-core \
+        # v1.6.3; restored packages still need their postinst scripts.
+        uses: awalsh128/cache-apt-pkgs-action@553a35bb8ebd9fcabcb1c9451aa4c98e1b4ca8a9
+        with:
+          packages: >-
+            pandoc
+            texlive-xetex
+            texlive-fonts-recommended
+            texlive-lang-chinese
+            lmodern
+            fonts-jetbrains-mono
+            fonts-noto-core
             fonts-symbola
+          version: ubuntu-26.04-1
+          execute_install_scripts: true
+
+      - name: Rebuild TeX file index and xelatex format
+        # dpkg triggers (mktexlsr, fmtutil) do not run when packages come from the apt cache.
+        run: |
+          sudo mktexlsr
+          sudo fmtutil-sys --byfmt xelatex
 
       - name: Prepare shared book resources
         run: |
@@ -94,17 +95,7 @@ jobs:
           cp book/rust-book-a4.pdf book/book.pdf
           (cd src && zip -r ../book/rust-book-src.zip .)
 
-      - name: Build English edition
-        working-directory: en
-        run: |
-          mdbook test -L ../test-deps/target/debug/deps
-          mdbook build
-          python3 scripts/check_pdf_code_lines.py
-          bash ../scripts/build_print.sh en
-          cp book/rust-book-a4.pdf book/book.pdf
-          (cd src && zip -r ../book/rust-book-src.zip .)
-
-      - name: Assemble multilingual site
+      - name: Assemble site
         run: |
           rm -rf public
           mkdir -p public
@@ -113,7 +104,6 @@ jobs:
           cp 404.html public/404.html
           cp robots.txt public/robots.txt
           cp -r zh-TW/book public/zh-TW
-          cp -r en/book public/en
 
       - name: Normalize URLs and generate SEO metadata and sitemap
         run: |
@@ -121,46 +111,32 @@ jobs:
           python3 scripts/add_seo_metadata.py public
           python3 scripts/generate_sitemap.py public
 
-      - name: Add IndexNow verification file
-        id: indexnow_key
-        env:
-          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
-        run: |
-          if [[ ! "$INDEXNOW_KEY" =~ ^[A-Za-z0-9-]{8,128}$ ]]; then
-            echo "::warning title=IndexNow disabled::INDEXNOW_KEY is missing or invalid; Pages deployment will continue without an IndexNow notification."
-            echo "configured=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          printf '%s' "$INDEXNOW_KEY" > "public/${INDEXNOW_KEY}.txt"
-          echo "configured=true" >> "$GITHUB_OUTPUT"
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v6
-
       - name: Upload site artifact
+        if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v5
         with:
           name: github-pages-${{ github.run_attempt }}
           path: ./public
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-26.04
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
         with:
           artifact_name: github-pages-${{ github.run_attempt }}
-
-      - name: Submit changed URLs to IndexNow
-        id: indexnow_submit
-        if: steps.indexnow_key.outputs.configured == 'true'
-        continue-on-error: true
-        env:
-          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
-        run: >-
-          python3 scripts/submit_indexnow.py public
-          --before "${{ github.event.before }}"
-          --after "${{ github.sha }}"
-
-      - name: Report IndexNow notification failure
-        if: steps.indexnow_submit.outcome == 'failure'
-        run: >-
-          echo "::warning title=IndexNow notification failed::GitHub Pages was deployed successfully; retry the IndexNow notification later if needed."

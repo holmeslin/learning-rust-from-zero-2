@@ -1,8 +1,8 @@
-// Shared by the English and Traditional Chinese mdBook editions.
+// Shared mdBook theme script, copied into each edition by prepare_mdbook_assets.py.
 (() => {
     "use strict";
 
-    const SHARE_ORIGIN = "https://learning-rust-from-ze.ro";
+    const SHARE_ORIGIN = "https://holmeslin.github.io/learning-rust-from-zero";
     const GITHUB_PROJECT_PATH = "/learning-rust-from-zero";
     const rightButtons = document.querySelector("#mdbook-menu-bar .right-buttons");
 

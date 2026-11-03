@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-EDITION_CODES = ("en", "zh-TW")
+EDITION_CODES = ("zh-TW",)
 
 
 @dataclass(frozen=True)

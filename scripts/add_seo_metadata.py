@@ -14,11 +14,8 @@ from edition_config import EDITION_CODES, load_edition_config
 
 
 SITE_URL = "https://holmeslin.github.io/learning-rust-from-zero"
-SITE_NAME = "Learning Rust from Zero / 從零開始學 Rust"
-ROOT_DESCRIPTION = (
-    "A Rust tutorial for absolute beginners, from basic syntax and ownership "
-    "to async programming."
-)
+SITE_NAME = "從零開始學 Rust"
+ROOT_DESCRIPTION = "為程式新手準備的 Rust 教學，從基本語法、所有權一路講到非同步程式設計。"
 EDITIONS = {code: load_edition_config(code) for code in EDITION_CODES}
 NON_CANONICAL_FOREWORDS = {
     f"{code}/foreword.html" for code in EDITION_CODES
@@ -186,12 +183,12 @@ def add_metadata(public_dir: Path, path: Path) -> None:
         return
 
     document = path.read_text(encoding="utf-8")
-    language, language_relative = page_info(public_dir, path)
+    language, _ = page_info(public_dir, path)
     url = page_url(public_dir, path)
     canonical = canonical_url(public_dir, path)
     title = extract_title(document)
     description = extract_description(document, title, language)
-    locale = EDITIONS[language].seo.locale if language is not None else "en_US"
+    locale = EDITIONS[language].seo.locale if language is not None else "zh_TW"
     page_type = "article" if language is not None else "website"
 
     document = upsert_meta(
@@ -252,32 +249,8 @@ def add_metadata(public_dir: Path, path: Path) -> None:
     for attr, key, tag in metadata:
         document = upsert_meta(document, attr, key, tag)
 
+    # Single edition: drop any hreflang alternates instead of generating them.
     document = remove_alternate_links(document)
-    alternate_tags: list[str] = []
-    if language is None:
-        candidates = {
-            code: public_dir / code / "index.html" for code in EDITION_CODES
-        }
-        x_default = url
-    else:
-        candidates = {
-            code: public_dir / code / language_relative
-            for code in EDITION_CODES
-        }
-        x_default = page_url(public_dir, candidates["en"])
-
-    for code, candidate in candidates.items():
-        if candidate.exists():
-            alternate_tags.append(
-                f'<link rel="alternate" hreflang="{EDITIONS[code].seo.hreflang}" '
-                f'href="{escape(page_url(public_dir, candidate), quote=True)}">'
-            )
-    alternate_tags.append(
-        f'<link rel="alternate" hreflang="x-default" '
-        f'href="{escape(x_default, quote=True)}">'
-    )
-
-    document = insert_before_head_end(document, alternate_tags)
     path.write_text(document, encoding="utf-8")
 
 
