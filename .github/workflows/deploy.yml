@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Keep CI reproducible; update these pins deliberately when new releases
-  # have been checked against both editions.
+  # Keep CI reproducible; update these pins deliberately after the new
+  # releases pass the book tests and builds.
   RUSTUP_TOOLCHAIN: "1.98.0"
   MDBOOK_VERSION: "0.5.4"
   NOTO_CJK_REVISION: "f8d157532fbfaeda587e826d4cd5b21a49186f7c"
@@ -33,9 +33,6 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-
-      - name: Check bilingual source mirror
-        run: python3 scripts/check_bilingual_mirror.py
 
       - name: Install Rust toolchain
         run: rustup toolchain install "$RUSTUP_TOOLCHAIN" --profile minimal --no-self-update
@@ -94,17 +91,7 @@ jobs:
           cp book/rust-book-a4.pdf book/book.pdf
           (cd src && zip -r ../book/rust-book-src.zip .)
 
-      - name: Build English edition
-        working-directory: en
-        run: |
-          mdbook test -L ../test-deps/target/debug/deps
-          mdbook build
-          python3 scripts/check_pdf_code_lines.py
-          bash ../scripts/build_print.sh en
-          cp book/rust-book-a4.pdf book/book.pdf
-          (cd src && zip -r ../book/rust-book-src.zip .)
-
-      - name: Assemble multilingual site
+      - name: Assemble site
         run: |
           rm -rf public
           mkdir -p public
@@ -113,7 +100,6 @@ jobs:
           cp 404.html public/404.html
           cp robots.txt public/robots.txt
           cp -r zh-TW/book public/zh-TW
-          cp -r en/book public/en
 
       - name: Normalize URLs and generate SEO metadata and sitemap
         run: |

@@ -1,4 +1,4 @@
-/* Shared by the English and Traditional Chinese mdBook editions. */
+/* Shared mdBook theme styles, copied into each edition by prepare_mdbook_assets.py. */
 code,
 pre > code,
 .ace_editor {
