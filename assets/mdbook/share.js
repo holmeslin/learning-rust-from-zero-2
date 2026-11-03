@@ -2,7 +2,7 @@
 (() => {
     "use strict";
 
-    const SHARE_ORIGIN = "https://learning-rust-from-ze.ro";
+    const SHARE_ORIGIN = "https://holmeslin.github.io/learning-rust-from-zero";
     const GITHUB_PROJECT_PATH = "/learning-rust-from-zero";
     const rightButtons = document.querySelector("#mdbook-menu-bar .right-buttons");
 
