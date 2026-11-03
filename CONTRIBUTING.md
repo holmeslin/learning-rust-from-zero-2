@@ -1,36 +1,15 @@
-# Contributing Guide
-
-Thanks for your interest in helping improve this tutorial!
-
-## How to contribute
-
-- **Report errors**: Open an issue describing the problem you found (typos, code errors, conceptual mistakes, etc.).
-- **Make suggestions**: Open an issue explaining what you think could be improved.
-- **Send a PR**: Fixing errors, improving the writing, and adding explanations are all welcome.
-
-## Licensing
-
-Unless otherwise noted, the text, images, and other non-code content of this tutorial are licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/).
-
-The code examples in this tutorial are released under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). You are free to copy, modify, and use them in personal or commercial projects, with no attribution required.
-
-By submitting an issue, pull request, or any other contribution, you confirm that you have the right to provide that contribution, and you grant the author and maintainers of this project a perpetual, worldwide, royalty-free, non-exclusive license to use, reproduce, modify, arrange, combine, and publish your contribution, and to incorporate it into this project, derivative teaching materials, publications, courses, or other related works, whether for non-commercial or commercial purposes.
-
-Once merged, your contribution will be published under this project's licenses: CC BY-NC-ND 4.0 for text and non-code content, and CC0 1.0 for code examples.
-
-Please do not submit content that you do not have the right to license.
-
----
-
 # 貢獻指南
 
-感謝你有興趣幫忙改善這份教學！
+感謝你有興趣幫忙改善這個專案！
 
 ## 怎麼貢獻
 
-- **回報錯誤**：開 issue 描述你發現的問題（錯字、程式碼錯誤、觀念錯誤等）。
-- **提出建議**：開 issue 說明你覺得哪裡可以改善。
-- **送 PR**：修正錯誤、改善文字、補充說明都歡迎。
+本 repo 的教學內容（`zh-TW/src/`）維持與[原作者版本](https://github.com/AndyShiue/learning-rust-from-zero)相同，不在這裡修改：
+
+- **教學內容的錯誤或建議**（錯字、程式碼錯誤、觀念錯誤等）：請回報到[原作者的專案](https://github.com/AndyShiue/learning-rust-from-zero)。
+- **建置、部署或網站的問題**（腳本、`deploy.yml`、首頁、404 頁、說明文件等）：歡迎直接送 PR 到本 repo。本 repo 目前沒有開放 Issues。
+
+送 PR 前，請先依 [BUILD.md](BUILD.md) 在本機跑過測試與建置。PR 會自動執行完整建置（含 PDF），通過後才會合併。
 
 ## 授權條款
 
