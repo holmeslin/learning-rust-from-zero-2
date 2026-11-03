@@ -2,79 +2,100 @@ name: deployment
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 env:
-  # Keep CI reproducible; update these pins deliberately when new releases
-  # have been checked against both editions.
-  RUST_VERSION: "1.98.0"
+  # Keep CI reproducible; update these pins deliberately after the new
+  # releases pass the book tests and builds.
   RUSTUP_TOOLCHAIN: "1.98.0"
   MDBOOK_VERSION: "0.5.4"
+  NOTO_CJK_REVISION: "f8d157532fbfaeda587e826d4cd5b21a49186f7c"
+  NOTO_SANS_CJK_TC_REGULAR_SHA256: "dce08bd4fd91aa8aa76ed8fea4b694c2dfb8550f67871e326843212ddbeb88b4"
+  NOTO_SANS_CJK_TC_BOLD_SHA256: "3ee160e5015106e3ec1a394301df54fa9bbbf8a251519984aec5c0abc50840c0"
+  NOTO_SANS_MONO_CJK_TC_REGULAR_SHA256: "82a040aed900bba51b5990bc158a86b264c8ad5071a2d8911e8696350e0794b3"
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
+    runs-on: ubuntu-26.04
+    # A newer push to the same PR makes the running check obsolete.
+    concurrency:
+      group: build-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
 
-      - name: Install Rust, mdBook, and PDF dependencies
-        run: |
-          rustup toolchain install "$RUST_VERSION" --profile minimal --no-self-update
-          cargo install mdbook --version "$MDBOOK_VERSION" --locked
-          sudo apt-get update
-          sudo apt-get install -y \
-            pandoc \
-            texlive-xetex \
-            texlive-latex-extra \
-            texlive-lang-chinese \
-            texlive-fonts-recommended \
-            fonts-jetbrains-mono \
-            fonts-noto-core \
-            fonts-noto-cjk \
+      - name: Install Rust toolchain
+        run: rustup toolchain install "$RUSTUP_TOOLCHAIN" --profile minimal --no-self-update
+
+      - name: Restore mdBook binary cache
+        id: mdbook-cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.cargo/bin/mdbook
+          key: mdbook-${{ runner.os }}-${{ runner.arch }}-${{ env.MDBOOK_VERSION }}
+
+      - name: Install mdBook
+        if: steps.mdbook-cache.outputs.cache-hit != 'true'
+        run: cargo install mdbook --version "$MDBOOK_VERSION" --locked
+
+      - name: Verify mdBook version
+        run: test "$(mdbook --version)" = "mdbook v${MDBOOK_VERSION}"
+
+      - name: Install PDF dependencies
+        # v1.6.3; restored packages still need their postinst scripts.
+        uses: awalsh128/cache-apt-pkgs-action@553a35bb8ebd9fcabcb1c9451aa4c98e1b4ca8a9
+        with:
+          packages: >-
+            pandoc
+            texlive-xetex
+            texlive-fonts-recommended
+            texlive-lang-chinese
+            lmodern
+            fonts-jetbrains-mono
+            fonts-noto-core
             fonts-symbola
+          version: ubuntu-26.04-1
+          execute_install_scripts: true
+
+      - name: Rebuild TeX file index and xelatex format
+        # dpkg triggers (mktexlsr, fmtutil) do not run when packages come from the apt cache.
+        run: |
+          sudo mktexlsr
+          sudo fmtutil-sys --byfmt xelatex
 
       - name: Prepare shared book resources
         run: |
-          cargo build --manifest-path test-deps/Cargo.toml
+          python3 -B scripts/prepare_mdbook_assets.py
+          cargo build --locked --manifest-path test-deps/Cargo.toml
           mkdir -p build/fonts
           curl -L --fail --retry 3 --retry-delay 2 \
             --output build/fonts/NotoSansCJKtc-Regular.otf \
-            https://raw.githubusercontent.com/notofonts/noto-cjk/main/Sans/OTF/TraditionalChinese/NotoSansCJKtc-Regular.otf
+            https://raw.githubusercontent.com/notofonts/noto-cjk/${NOTO_CJK_REVISION}/Sans/OTF/TraditionalChinese/NotoSansCJKtc-Regular.otf
           curl -L --fail --retry 3 --retry-delay 2 \
             --output build/fonts/NotoSansCJKtc-Bold.otf \
-            https://raw.githubusercontent.com/notofonts/noto-cjk/main/Sans/OTF/TraditionalChinese/NotoSansCJKtc-Bold.otf
+            https://raw.githubusercontent.com/notofonts/noto-cjk/${NOTO_CJK_REVISION}/Sans/OTF/TraditionalChinese/NotoSansCJKtc-Bold.otf
           curl -L --fail --retry 3 --retry-delay 2 \
             --output build/fonts/NotoSansMonoCJKtc-Regular.otf \
-            https://raw.githubusercontent.com/notofonts/noto-cjk/main/Sans/Mono/NotoSansMonoCJKtc-Regular.otf
+            https://raw.githubusercontent.com/notofonts/noto-cjk/${NOTO_CJK_REVISION}/Sans/Mono/NotoSansMonoCJKtc-Regular.otf
+          echo "$NOTO_SANS_CJK_TC_REGULAR_SHA256  build/fonts/NotoSansCJKtc-Regular.otf" | sha256sum --check --strict -
+          echo "$NOTO_SANS_CJK_TC_BOLD_SHA256  build/fonts/NotoSansCJKtc-Bold.otf" | sha256sum --check --strict -
+          echo "$NOTO_SANS_MONO_CJK_TC_REGULAR_SHA256  build/fonts/NotoSansMonoCJKtc-Regular.otf" | sha256sum --check --strict -
 
       - name: Build Traditional Chinese edition
         working-directory: zh-TW
         run: |
           mdbook test -L ../test-deps/target/debug/deps
           mdbook build
-          bash ./print/build.sh
+          bash ../scripts/build_print.sh zh-TW
           cp book/rust-book-a4.pdf book/book.pdf
           (cd src && zip -r ../book/rust-book-src.zip .)
 
-      - name: Build English edition
-        working-directory: en
-        run: |
-          mdbook test -L ../test-deps/target/debug/deps
-          mdbook build
-          python3 scripts/check_pdf_code_lines.py
-          bash ./print/build.sh
-          cp book/rust-book-a4.pdf book/book.pdf
-          (cd src && zip -r ../book/rust-book-src.zip .)
-
-      - name: Assemble multilingual site
+      - name: Assemble site
         run: |
           rm -rf public
           mkdir -p public
@@ -83,22 +104,39 @@ jobs:
           cp 404.html public/404.html
           cp robots.txt public/robots.txt
           cp -r zh-TW/book public/zh-TW
-          cp -r en/book public/en
 
-      - name: Generate SEO metadata and sitemap
+      - name: Normalize URLs and generate SEO metadata and sitemap
         run: |
           python3 scripts/normalize_public_urls.py public
           python3 scripts/add_seo_metadata.py public
           python3 scripts/generate_sitemap.py public
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v6
-
       - name: Upload site artifact
+        if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v5
         with:
+          name: github-pages-${{ github.run_attempt }}
           path: ./public
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-26.04
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}

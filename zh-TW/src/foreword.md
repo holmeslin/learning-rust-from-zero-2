@@ -8,7 +8,7 @@
 
 如果讀者在閱讀的過程中遇到看不懂的段落、想要練習題，或寫的程式跑不起來，而想問 AI 怎麼辦，我提供了一個壓縮檔給 AI 閱讀，讓 AI 能更精準回應你的需求。使用的時候只要把整份壓縮檔上傳給 AI，和他說「請先閱讀壓縮檔裡的 `GUIDE.md` 再回答我」，並且告訴 AI 你目前讀到第幾章第幾集再提出你的需求就好了。壓縮檔的下載連結如下：
 
-> `rust-book-src.zip`：[https://andyshiue.github.io/learning-rust-from-zero/zh-TW/rust-book-src.zip](https://andyshiue.github.io/learning-rust-from-zero/zh-TW/rust-book-src.zip)
+> `rust-book-src.zip`：[https://holmeslin.github.io/learning-rust-from-zero/zh-TW/rust-book-src.zip](https://holmeslin.github.io/learning-rust-from-zero/zh-TW/rust-book-src.zip)
 
 強烈建議要用好一點的 AI 模型讀壓縮檔！免費的 AI 甚至可能完全懶得讀壓縮檔內的內容。
 
@@ -20,19 +20,19 @@
 4. 就算你使用 AI 幫助閱讀，那也不代表需要的時候你不能回來閱讀教學本文。
 5. 其實你並不一定要去 GitHub 對我的專案進行 `git clone`；上面的 `.zip` 檔已經包含了本教學的全部內容（你可以手動解壓縮看看）。之所以會建議使用壓縮檔而非直接閱讀網頁是因為壓縮檔中的內容是純文字，對於 AI 會更友善。
 6. 我後來才發現，現代「完全的初學者」可能並沒有那麼多，因此會想跳過第 1 章。上面有說這或許可行，但如果你發現自己好像沒搞懂最基礎的概念，第 1 章的本文都非常短，閱讀一下真的不需要花多少時間。
-7. 請特別注意非同步一章的前半。那部分的精髓就在於練習讀懂程式碼，就算你用 AI 閱讀也一樣。在此特別推薦一書：[Asynchronous Programming in Rust](https://www.packtpub.com/en-us/product/asynchronous-programming-in-rust-9781805126621)。本教學的非同步一章是參考該書後自己重寫出來的。
+7. 請特別注意非同步一章的前半。那部分的精髓就在於練習讀懂程式碼，就算你用 AI 閱讀也一樣。在此特別推薦一書：[*Asynchronous Programming in Rust*](https://www.packtpub.com/en-us/product/asynchronous-programming-in-rust-9781805126621)。本教學的非同步一章是參考該書後自己重寫出來的。
 
 另外本教學也有 PDF 版供讀者下載：
 
-> PDF 版：[https://andyshiue.github.io/learning-rust-from-zero/zh-TW/book.pdf](https://andyshiue.github.io/learning-rust-from-zero/zh-TW/book.pdf)
+> PDF 版：[https://holmeslin.github.io/learning-rust-from-zero/zh-TW/book.pdf](https://holmeslin.github.io/learning-rust-from-zero/zh-TW/book.pdf)
 
 但我可能不會長期維護 PDF 版，因此還是比較建議閱讀有互動功能的網頁版教學。如果你現在就正在閱讀 PDF 版的話，以下是網頁版的網址：
 
-> 網頁版：[https://andyshiue.github.io/learning-rust-from-zero/zh-TW/](https://andyshiue.github.io/learning-rust-from-zero/zh-TW/)
+> 網頁版：[https://holmeslin.github.io/learning-rust-from-zero/zh-TW/](https://holmeslin.github.io/learning-rust-from-zero/zh-TW/)
 
 最後提一下上面說的互動功能，不然怕沒人知道：你可以直接在網頁版教學裡面跑程式。文內程式原始碼的右上角有幾個按鈕，按了就知道會發生什麼事了。大概先這樣吧......
 
 本教學除大綱外，初稿由 AI 完成，並經人類修改：
 
-- 模型：Claude 4.5 ~ 5 / GPT-5.5 ~ 5.6
+- 模型：Claude 4.5 ~ 5 / GPT-5.5 ~ 6
 - 馬具：OpenClaw / Claude Code / ChatGPT (Codex)

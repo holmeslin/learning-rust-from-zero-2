@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://learning-rust-from-ze.ro/sitemap.xml
+Sitemap: https://holmeslin.github.io/learning-rust-from-zero/sitemap.xml

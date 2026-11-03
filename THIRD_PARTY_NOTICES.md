@@ -1,19 +1,19 @@
-# Third-party notices
+# 第三方授權聲明
 
 ## Google Noto Emoji — Orange Book
 
-The following files contain the unmodified Google Noto Emoji “Orange Book” SVG artwork:
+下列檔案包含未經修改的 Google Noto Emoji「Orange Book」SVG 圖像：
 
 - `favicon.svg`
-- `en/theme/favicon.svg`
-- `zh-TW/theme/favicon.svg`
 
-- Upstream project: <https://github.com/googlefonts/noto-emoji>
-- Source SVG: <https://www.iconarchive.com/download/i107862/google/noto-emoji-objects/62862-orange-book.svg>
-- License: Apache License 2.0
-- Copyright: Google, Inc. (2013)
+- 上游專案：<https://github.com/googlefonts/noto-emoji>
+- SVG 來源：<https://www.iconarchive.com/download/i107862/google/noto-emoji-objects/62862-orange-book.svg>
+- 授權：Apache License 2.0
+- 著作權：Google, Inc. (2013)
 
-The favicon files above are third-party artwork and are not relicensed under this repository’s CC BY-NC-ND 4.0 content license. This repository’s own content license remains unchanged. The SVG files are distributed under the Apache License 2.0 reproduced below. Because the files are unmodified, no modification notice is required.
+上述 favicon 屬於第三方圖像，不適用本 repo 的 CC BY-NC-ND 4.0 內容授權，本 repo 自身內容的授權也不因此改變。這個 SVG 檔依下方全文收錄的 Apache License 2.0 散布；由於檔案未經修改，不需要附上修改聲明。
+
+以下授權條款以英文原文為準。
 
 ## Apache License 2.0
 

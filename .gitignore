@@ -1,8 +1,11 @@
 Cargo.lock
+!/test-deps/Cargo.lock
 book/
 build/
+public/
 target/
 __pycache__/
 .claude/
+/zh-TW/theme/
 names.txt
 output.txt
