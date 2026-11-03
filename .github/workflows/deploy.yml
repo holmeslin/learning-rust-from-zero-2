@@ -2,15 +2,11 @@ name: deployment
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
 
 env:
   # Keep CI reproducible; update these pins deliberately after the new
@@ -23,16 +19,15 @@ env:
   NOTO_SANS_MONO_CJK_TC_REGULAR_SHA256: "82a040aed900bba51b5990bc158a86b264c8ad5071a2d8911e8696350e0794b3"
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-26.04
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    # A newer push to the same PR makes the running check obsolete.
+    concurrency:
+      group: build-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
 
       - name: Install Rust toolchain
         run: rustup toolchain install "$RUSTUP_TOOLCHAIN" --profile minimal --no-self-update
@@ -52,17 +47,20 @@ jobs:
         run: test "$(mdbook --version)" = "mdbook v${MDBOOK_VERSION}"
 
       - name: Install PDF dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            pandoc \
-            texlive-xetex \
-            texlive-fonts-recommended \
-            texlive-lang-chinese \
-            lmodern \
-            fonts-jetbrains-mono \
-            fonts-noto-core \
+        # v1.6.3; texlive and fonts need their postinst scripts (fmtutil, fc-cache) on restore.
+        uses: awalsh128/cache-apt-pkgs-action@553a35bb8ebd9fcabcb1c9451aa4c98e1b4ca8a9
+        with:
+          packages: >-
+            pandoc
+            texlive-xetex
+            texlive-fonts-recommended
+            texlive-lang-chinese
+            lmodern
+            fonts-jetbrains-mono
+            fonts-noto-core
             fonts-symbola
+          version: ubuntu-26.04-1
+          execute_install_scripts: true
 
       - name: Prepare shared book resources
         run: |
@@ -107,14 +105,29 @@ jobs:
           python3 scripts/add_seo_metadata.py public
           python3 scripts/generate_sitemap.py public
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v6
-
       - name: Upload site artifact
+        if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v5
         with:
           name: github-pages-${{ github.run_attempt }}
           path: ./public
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-26.04
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
 
       - name: Deploy to GitHub Pages
         id: deployment
