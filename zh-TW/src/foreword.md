@@ -22,15 +22,7 @@
 6. 我後來才發現，現代「完全的初學者」可能並沒有那麼多，因此會想跳過第 1 章。上面有說這或許可行，但如果你發現自己好像沒搞懂最基礎的概念，第 1 章的本文都非常短，閱讀一下真的不需要花多少時間。
 7. 請特別注意非同步一章的前半。那部分的精髓就在於練習讀懂程式碼，就算你用 AI 閱讀也一樣。在此特別推薦一書：[*Asynchronous Programming in Rust*](https://www.packtpub.com/en-us/product/asynchronous-programming-in-rust-9781805126621)。本教學的非同步一章是參考該書後自己重寫出來的。
 
-另外本教學也有 PDF 版供讀者下載：
-
-> PDF 版：[https://holmeslin.github.io/learning-rust-from-zero/zh-TW/book.pdf](https://holmeslin.github.io/learning-rust-from-zero/zh-TW/book.pdf)
-
-但我可能不會長期維護 PDF 版，因此還是比較建議閱讀有互動功能的網頁版教學。如果你現在就正在閱讀 PDF 版的話，以下是網頁版的網址：
-
-> 網頁版：[https://holmeslin.github.io/learning-rust-from-zero/zh-TW/](https://holmeslin.github.io/learning-rust-from-zero/zh-TW/)
-
-最後提一下上面說的互動功能，不然怕沒人知道：你可以直接在網頁版教學裡面跑程式。文內程式原始碼的右上角有幾個按鈕，按了就知道會發生什麼事了。大概先這樣吧......
+最後提一下網頁版的互動功能，不然怕沒人知道：你可以直接在網頁版教學裡面跑程式。文內程式原始碼的右上角有幾個按鈕，按了就知道會發生什麼事了。大概先這樣吧......
 
 本教學除大綱外，初稿由 AI 完成，並經人類修改：
 
