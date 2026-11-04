@@ -26,8 +26,6 @@ class SeoConfig:
 @dataclass(frozen=True)
 class EditionConfig:
     code: str
-    title: str
-    authors: tuple[str, ...]
     seo: SeoConfig
 
 
@@ -54,21 +52,6 @@ def _string(table: dict[str, object], key: str, path: Path) -> str:
     if not isinstance(value, str) or not value:
         raise ValueError(f"{path}: {key} must be a non-empty string")
     return value
-
-
-def _strings(
-    table: dict[str, object],
-    key: str,
-    path: Path,
-) -> tuple[str, ...]:
-    value = table.get(key)
-    if (
-        not isinstance(value, list)
-        or not value
-        or any(not isinstance(item, str) or not item for item in value)
-    ):
-        raise ValueError(f"{path}: {key} must be a non-empty string array")
-    return tuple(value)
 
 
 def _validate_templates(config: EditionConfig, path: Path) -> None:
@@ -105,8 +88,6 @@ def load_edition_config(code: str) -> EditionConfig:
 
     config = EditionConfig(
         code=code,
-        title=_string(book, "title", book_path),
-        authors=_strings(book, "authors", book_path),
         seo=SeoConfig(
             hreflang=_string(seo_table, "hreflang", edition_path),
             locale=_string(seo_table, "locale", edition_path),

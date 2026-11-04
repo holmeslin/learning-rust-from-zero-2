@@ -14,7 +14,7 @@ cargo install mdbook --version 0.5.4 --locked
 
 這兩個版本要和 `.github/workflows/deploy.yml` 裡的 `RUSTUP_TOOLCHAIN`、`MDBOOK_VERSION` 一致。確認新版本能通過測試和建置之後，再更新鎖定的版本。
 
-完整流程還需要 Bash、Python 3.11 以上與 `zip`。
+完整流程還需要 Python 3.11 以上與 `zip`。
 
 Ubuntu/Debian 可以這樣安裝 Rust 以外的相依套件：
 
@@ -33,9 +33,9 @@ brew install python
 
 ## 版本設定
 
-`zh-TW/edition.toml` 存放不屬於共用腳本的在地化設定：SEO locale 與預設描述，以及轉址頁文字。書名、作者與語言代碼則放在 `zh-TW/book.toml`。
+`zh-TW/edition.toml` 存放不屬於共用腳本的在地化設定：SEO locale 與預設描述，以及轉址頁文字。書名、作者與語言代碼則放在 `zh-TW/book.toml`，由 mdBook 讀取，腳本只會用到其中的語言代碼。
 
-`scripts/` 裡的 Python 腳本會透過 `scripts/edition_config.py` 讀取並驗證這兩個檔案，版本清單定義在 `EDITION_CODES`。演算法放在 `scripts/`，文字的調整請改 `zh-TW/edition.toml`。
+`scripts/` 裡的 Python 腳本會透過 `scripts/edition_config.py` 讀取並驗證 `zh-TW/edition.toml`，同時檢查 `zh-TW/book.toml` 的 `book.language` 是否與版本代碼相符。版本清單定義在 `EDITION_CODES`。演算法放在 `scripts/`，文字的調整請改 `zh-TW/edition.toml`。
 
 ## 共用的 mdBook 主題檔
 

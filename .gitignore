@@ -1,7 +1,6 @@
 Cargo.lock
 !/test-deps/Cargo.lock
 book/
-build/
 public/
 target/
 __pycache__/
