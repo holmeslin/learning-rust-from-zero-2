@@ -9,7 +9,7 @@
 - **教學內容的錯誤或建議**（錯字、程式碼錯誤、觀念錯誤等）：請回報到[原作者的專案](https://github.com/AndyShiue/learning-rust-from-zero)。
 - **建置、部署或網站的問題**（腳本、`deploy.yml`、首頁、404 頁、說明文件等）：歡迎直接送 PR 到本 repo。本 repo 目前沒有開放 Issues。
 
-送 PR 前，請先依 [BUILD.md](BUILD.md) 在本機跑過測試與建置。PR 會自動執行完整建置（含 PDF），通過後才會合併。
+送 PR 前，請先依 [BUILD.md](BUILD.md) 在本機跑過測試與建置。PR 會自動執行完整建置，通過後才會合併。
 
 ## 授權條款
 

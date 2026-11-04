@@ -7,7 +7,6 @@
 為程式新手準備的 Rust 教學，從基本語法、所有權一路講到非同步程式設計。
 
 - 網頁版：<https://holmeslin.github.io/learning-rust-from-zero/zh-TW/>
-- PDF 版：<https://holmeslin.github.io/learning-rust-from-zero/zh-TW/book.pdf>
 - 原始檔：<https://holmeslin.github.io/learning-rust-from-zero/zh-TW/rust-book-src.zip>
 
 ## 參考來源
@@ -23,7 +22,7 @@
 
 ## 本機建置
 
-需要的工具、測試、HTML 與 PDF 的建置步驟，請見 [BUILD.md](BUILD.md)。
+需要的工具、測試與 HTML 的建置步驟，請見 [BUILD.md](BUILD.md)。
 
 ## 貢獻
 
